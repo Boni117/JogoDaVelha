@@ -110,3 +110,5 @@ programa
 		escreva("\n")
 	}
 }
+
+// teste
