@@ -43,13 +43,20 @@ programa
 		// Tente rascunhar o faca...enquanto aqui
 	}
 
-	funcao modoJogadorVsCPU()
+	
+
+	funcao modoCPUvsCPU()funcao modoJogadorVsCPU()
 	{
+		inteiro linha, coluna
+		logico jogoRodando = verdadeiro
+		faca{
+			//vez do jogador
+			linha = u.sorteia(0, 2)
+			coluna = u.sorteia(0, 2)
+			}enquanto (casas[linha][coluna] != " "
 		// Aqui um jogador usa 'leia' e o outro usa 'u.sorteia'
 		escreva("Iniciando modo Jogador vs CPU...\n")
 	}
-
-	funcao modoCPUvsCPU()
 	{
 		// Aqui os dois jogadores usam 'u.sorteia'
 		escreva("Iniciando modo CPU vs CPU...\n")
@@ -69,9 +76,24 @@ programa
 		// Dica: Falta adicionar aqui a verificação de colunas e diagonais depois!
 		retorne falso
 	}
-
-	funcao exibirTabuleiro()
+funcao exibirTabuleiro()
 	{
-		// Escreva aqui o código para mostrar o tabuleiro na tela
+		limpa() 
+		escreva("      0     1     2  \n") 
+		escreva("   ___________________\n")
+		
+		para (inteiro linha = 0; linha < 3; linha++) 
+		{
+			escreva(linha, " |") 
+			
+			para (inteiro coluna = 0; coluna < 3; coluna++) 
+			{
+				// Agora o código "fala" o que está fazendo
+				escreva("  ", casas[linha][coluna], "  |") 
+			}
+			
+			escreva("\n   |_____|_____|_____|\n")
+		}
+		escreva("\n")
 	}
 }
