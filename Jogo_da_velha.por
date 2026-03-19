@@ -1,52 +1,77 @@
 programa
 {
+	inclua biblioteca Util --> u
+
+	cadeia casas[3][3] = {
+		{" "," "," "},
+		{" "," "," "},
+		{" "," "," "}
+	}
+	
 	funcao inicio()
 	{
-		cadeia casa
 		inteiro opcao
-		cadeia casas[3][3] = {
-			{"1", "2", "3"},
-			{"4", "5", "6"},
-			{"7", "8", "9"}
+		escreva("--- MENU DO JOGO ---\n")
+		escreva("1) Jogador vs Jogador\n")
+		escreva("2) Jogador vs CPU\n")
+		escreva("3) CPU vs CPU\n")
+		escreva("Escolha: ")
+		leia(opcao)
+
+		escolha(opcao)
+		{
+			caso 1: 
+				modoJogadorVsJogador() 
+				pare
+			caso 2: 
+				modoJogadorVsCPU() 
+				pare
+			caso 3: 
+				modoCPUvsCPU() 
+				pare
+			caso contrario: 
+				escreva("Opção inválida!")
 		}
-
-		faca {
-			limpa()
-			menu()
-			leia(opcao)
-			limpa()
-
-			se (opcao >= 1 e opcao <= 3){
-				para (inteiro linha = 0; linha < 3; linha++){
-					para (inteiro coluna = 0; coluna < 3; coluna++){
-						escreva(casas[linha][coluna], " ")
-					}
-					escreva("\n")
-				}
-				
-				escolha (opcao){
-					caso 1:
-						escreva("\nEscolha uma casa: ")
-						leia(casa)
-						pare
-					
-					caso 2:
-						
-				}
-			}senao se (opcao == 4){
-				escreva("Saindo...")
-			}
-
-		}enquanto (opcao != 4)
 	} 
 
-	funcao menu(){
-	
-		escreva("======= JOGO DA VELHA =======\n")
-		escreva("Escolha uma opção de jogo:\n")
-		escreva("1. JxJ\n")
-		escreva("2. JxCPU\n")
-		escreva("3. CPUxCPU\n")
-		escreva("4. Sair\n")
+	// --- FUNÇÕES DOS MODOS DE JOGO ---
+
+	funcao modoJogadorVsJogador()
+	{
+		// Aqui você sabe que SEMPRE vai usar o 'leia' para os dois jogadores
+		escreva("Iniciando modo Jogador vs Jogador...\n")
+		// Tente rascunhar o faca...enquanto aqui
+	}
+
+	funcao modoJogadorVsCPU()
+	{
+		// Aqui um jogador usa 'leia' e o outro usa 'u.sorteia'
+		escreva("Iniciando modo Jogador vs CPU...\n")
+	}
+
+	funcao modoCPUvsCPU()
+	{
+		// Aqui os dois jogadores usam 'u.sorteia'
+		escreva("Iniciando modo CPU vs CPU...\n")
+	}
+
+	// --- FUNÇÕES DE APOIO ---
+
+	funcao logico verificarVencedor()
+	{
+		para(inteiro i = 0; i < 3; i++)
+		{
+			se (casas[i][0] != " " e casas[i][0] == casas[i][1] e casas[i][1] == casas[i][2])
+			{
+				retorne verdadeiro 
+			}
+		}
+		// Dica: Falta adicionar aqui a verificação de colunas e diagonais depois!
+		retorne falso
+	}
+
+	funcao exibirTabuleiro()
+	{
+		// Escreva aqui o código para mostrar o tabuleiro na tela
 	}
 }
