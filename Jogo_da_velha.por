@@ -1,7 +1,6 @@
 programa
 {
-	
-inclua biblioteca Util --> u
+	inclua biblioteca Util --> u
 
 	cadeia casas[3][3] = {
 		{" "," "," "},
@@ -41,28 +40,27 @@ inclua biblioteca Util --> u
 		cadeia jogadorAtual = "X"
 
 		faca{
-			exibirTabuleiro()
+			exibirTabuleiro()	
+			cadeia nomeExibicao = (jogadorAtual == "X") ? "Jogador 1 (X)" : "Jogador 2 (O)"
 
-				escreva("Vez do jogador [", jogadorAtual, "]. Digite linha e coluna (0-2): ")
-				leia(linha, coluna)
+			escreva("\n--- Vez do ", nomeExibicao, " ---\n")
+			escreva("Digite a linha e coluna (0-2): ")
+			leia(linha, coluna)
 
-				se(linha >= 0 e linha <= 2 e coluna >= 0 e coluna <= 2 e casas[linha][coluna] == " "){
-					casas[linha][coluna] = jogadorAtual
-					totalJogadas = totalJogadas + 1
-					alguemVenceu = verificarVencedor()
+			se(linha >= 0 e linha <= 2 e coluna >= 0 e coluna <= 2 e casas[linha][coluna] == " "){
+				casas[linha][coluna] = jogadorAtual
+				totalJogadas = totalJogadas + 1
 
-					se(alguemVenceu == falso e totalJogadas < 9){
-						se(jogadorAtual == "X"){
-							jogadorAtual = "O"
-						}senao{
-							jogadorAtual = "X"
-						}
-					}
-				}senao{
-					escreva("Jogada inválida, tente novamente.")
-					u.aguarde(1500)
+				alguemVenceu = verificarVencedor()
+
+				se(nao alguemVenceu e totalJogadas < 9){
+					jogadorAtual = (jogadorAtual == "X") ? "O" : "X"
 				}
-		}enquanto(alguemVenceu == falso e totalJogadas < 9)
+			}senao{
+				escreva("Jogada inválida, tente novamente.")
+				u.aguarde(1500)
+			}
+		}enquanto(nao alguemVenceu e totalJogadas < 9)
 
 		exibirResultados(alguemVenceu, jogadorAtual)
 	}
@@ -74,16 +72,18 @@ inclua biblioteca Util --> u
 
 		faca{
 			exibirTabuleiro()
-
-			escreva("Sua vez [X]. Linha e coluna: ")
+			escreva("\nSua vez [X]. Linha e coluna: ")
 			leia(linha, coluna)
 
-			se(casas[linha][coluna] == " "){
+			se(linha >= 0 e linha <= 2 e coluna >= 0 e coluna <= 2 e casas[linha][coluna] == " "){
 				casas[linha][coluna] = "X"
 				totalJogadas = totalJogadas + 1
 				alguemVenceu = verificarVencedor()
 
-				se(alguemVenceu == falso e totalJogadas < 9){
+				se(nao alguemVenceu e totalJogadas < 9){
+					// Vez da CPU
+					escreva("\nCPU pensando...")
+					u.aguarde(800)
 					faca{
 						linha = u.sorteia(0, 2)
 						coluna = u.sorteia(0, 2)
@@ -93,15 +93,41 @@ inclua biblioteca Util --> u
 					totalJogadas = totalJogadas + 1
 					alguemVenceu = verificarVencedor()
 				}
+			}senao{
+				escreva("Jogada inválida!")
+				u.aguarde(1000)
 			}
-		}enquanto(alguemVenceu == falso e totalJogadas < 9)
+		}enquanto(nao alguemVenceu e totalJogadas < 9)
 
-		exibirResultados(alguemVenceu, "X ou CPU")
+		exibirResultados(alguemVenceu, (verificarVencedor() e casas[linha][coluna] == "X") ? "Jogador" : "CPU")
 	}
 
 	funcao modoCPUvsCPU()
 	{
-		escreva("tem que fazer ainda")
+		inteiro linha, coluna, totalJogadas = 0
+		logico alguemVenceu = falso
+		cadeia jogadorAtual = "X"
+
+		faca{
+			exibirTabuleiro()
+			escreva("\nVez da CPU [", jogadorAtual, "]. Pensando...\n")
+			u.aguarde(1000) 
+
+			faca{
+				linha = u.sorteia(0, 2)
+				coluna = u.sorteia(0, 2)
+			}enquanto(casas[linha][coluna] != " ")
+
+			casas[linha][coluna] = jogadorAtual
+			totalJogadas++
+			alguemVenceu = verificarVencedor()
+
+			se(nao alguemVenceu e totalJogadas < 9){
+				jogadorAtual = (jogadorAtual == "X") ? "O" : "X"
+			}
+		}enquanto(nao alguemVenceu e totalJogadas < 9)
+
+		exibirResultados(alguemVenceu, jogadorAtual)
 	}
 
 	funcao exibirTabuleiro()
@@ -123,10 +149,8 @@ inclua biblioteca Util --> u
 			se(casas[i][0] != " " e casas[i][0] == casas[i][1] e casas[i][1] == casas[i][2]) retorne verdadeiro
 			se(casas[0][i] != " " e casas[0][i] == casas[1][i] e casas[1][i] == casas[2][i]) retorne verdadeiro
 		}
-
 		se(casas[0][0] != " " e casas[0][0] == casas[1][1] e casas[1][1] == casas[2][2]) retorne verdadeiro
 		se(casas[0][2] != " " e casas[0][2] == casas[1][1] e casas[1][1] == casas[2][0]) retorne verdadeiro
-
 		retorne falso
 	}
 
@@ -134,9 +158,9 @@ inclua biblioteca Util --> u
 	{
 		exibirTabuleiro()
 		se(venceu){
-			escreva("Fim de jogo. [", jogador, "] venceu.")
+			escreva("\nFim de jogo. [", jogador, "] venceu!\n")
 		}senao{
-			escreva("Deu velha.")
+			escreva("\nDeu velha!\n")
 		}
 	}
 }
