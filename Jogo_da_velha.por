@@ -41,7 +41,13 @@ programa
 
 		faca{
 			exibirTabuleiro()	
-			cadeia nomeExibicao = (jogadorAtual == "X") ? "Jogador 1 (X)" : "Jogador 2 (O)"
+			cadeia nomeExibicao
+			
+			se (jogadorAtual == "X") {
+				nomeExibicao = "Jogador 1 (X)"
+			} senao {
+				nomeExibicao = "Jogador 2 (O)"
+			}
 
 			escreva("\n--- Vez do ", nomeExibicao, " ---\n")
 			escreva("Digite a linha e coluna (0-2): ")
@@ -53,14 +59,18 @@ programa
 
 				alguemVenceu = verificarVencedor()
 
-				se(nao alguemVenceu e totalJogadas < 9){
-					jogadorAtual = (jogadorAtual == "X") ? "O" : "X"
+				se(alguemVenceu == falso e totalJogadas < 9){
+					se (jogadorAtual == "X") {
+						jogadorAtual = "O"
+					} senao {
+						jogadorAtual = "X"
+					}
 				}
 			}senao{
 				escreva("Jogada inválida, tente novamente.")
 				u.aguarde(1500)
 			}
-		}enquanto(nao alguemVenceu e totalJogadas < 9)
+		}enquanto(alguemVenceu == falso e totalJogadas < 9)
 
 		exibirResultados(alguemVenceu, jogadorAtual)
 	}
@@ -69,6 +79,7 @@ programa
 	{
 		inteiro linha, coluna, totalJogadas = 0
 		logico alguemVenceu = falso
+		cadeia vencedorFinal = ""
 
 		faca{
 			exibirTabuleiro()
@@ -79,9 +90,9 @@ programa
 				casas[linha][coluna] = "X"
 				totalJogadas = totalJogadas + 1
 				alguemVenceu = verificarVencedor()
+				vencedorFinal = "Você"
 
-				se(nao alguemVenceu e totalJogadas < 9){
-					// Vez da CPU
+				se(alguemVenceu == falso e totalJogadas < 9){
 					escreva("\nCPU pensando...")
 					u.aguarde(800)
 					faca{
@@ -92,14 +103,15 @@ programa
 					casas[linha][coluna] = "O"
 					totalJogadas = totalJogadas + 1
 					alguemVenceu = verificarVencedor()
+					vencedorFinal = "CPU"
 				}
 			}senao{
 				escreva("Jogada inválida!")
 				u.aguarde(1000)
 			}
-		}enquanto(nao alguemVenceu e totalJogadas < 9)
+		}enquanto(alguemVenceu == falso e totalJogadas < 9)
 
-		exibirResultados(alguemVenceu, (verificarVencedor() e casas[linha][coluna] == "X") ? "Jogador" : "CPU")
+		exibirResultados(alguemVenceu, vencedorFinal)
 	}
 
 	funcao modoCPUvsCPU()
@@ -119,13 +131,17 @@ programa
 			}enquanto(casas[linha][coluna] != " ")
 
 			casas[linha][coluna] = jogadorAtual
-			totalJogadas++
+			totalJogadas = totalJogadas + 1
 			alguemVenceu = verificarVencedor()
 
-			se(nao alguemVenceu e totalJogadas < 9){
-				jogadorAtual = (jogadorAtual == "X") ? "O" : "X"
+			se(alguemVenceu == falso e totalJogadas < 9){
+				se (jogadorAtual == "X") {
+					jogadorAtual = "O"
+				} senao {
+					jogadorAtual = "X"
+				}
 			}
-		}enquanto(nao alguemVenceu e totalJogadas < 9)
+		}enquanto(alguemVenceu == falso e totalJogadas < 9)
 
 		exibirResultados(alguemVenceu, jogadorAtual)
 	}
