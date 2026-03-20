@@ -1,6 +1,7 @@
 programa
 {
-	inclua biblioteca Util --> u
+	
+inclua biblioteca Util --> u
 
 	cadeia casas[3][3] = {
 		{" "," "," "},
@@ -11,104 +12,131 @@ programa
 	funcao inicio()
 	{
 		inteiro opcao
-		escreva("--- MENU DO JOGO ---\n")
+		escreva("--- JOGO DA VELHA ---\n")
 		escreva("1) Jogador vs Jogador\n")
 		escreva("2) Jogador vs CPU\n")
 		escreva("3) CPU vs CPU\n")
 		escreva("Escolha: ")
 		leia(opcao)
 
-		escolha(opcao)
-		{
-			caso 1: 
-				modoJogadorVsJogador() 
+		escolha(opcao){
+			caso 1:
+				modoJogadorVsJogador()
 				pare
-			caso 2: 
-				modoJogadorVsCPU() 
+			caso 2:
+				modoJogadorVsCPU()
 				pare
-			caso 3: 
-				modoCPUvsCPU() 
+			caso 3:
+				modoCPUvsCPU()
 				pare
-			caso contrario: 
-				escreva("Opção inválida!")
+			caso contrario:
+				escreva("Opção inválida.")
 		}
-	} 
+	}
 
 	funcao modoJogadorVsJogador()
 	{
-		escreva("Iniciando modo Jogador vs Jogador...\n")
+		inteiro linha, coluna, totalJogadas = 0
+		logico alguemVenceu = falso
+		cadeia jogadorAtual = "X"
+
+		faca{
+			exibirTabuleiro()
+
+				escreva("Vez do jogador [", jogadorAtual, "]. Digite linha e coluna (0-2): ")
+				leia(linha, coluna)
+
+				se(linha >= 0 e linha <= 2 e coluna >= 0 e coluna <= 2 e casas[linha][coluna] == " "){
+					casas[linha][coluna] = jogadorAtual
+					totalJogadas = totalJogadas + 1
+					alguemVenceu = verificarVencedor()
+
+					se(alguemVenceu == falso e totalJogadas < 9){
+						se(jogadorAtual == "X"){
+							jogadorAtual = "O"
+						}senao{
+							jogadorAtual = "X"
+						}
+					}
+				}senao{
+					escreva("Jogada inválida, tente novamente.")
+					u.aguarde(1500)
+				}
+		}enquanto(alguemVenceu == falso e totalJogadas < 9)
+
+		exibirResultados(alguemVenceu, jogadorAtual)
 	}
 
 	funcao modoJogadorVsCPU()
 	{
-		inteiro linha, coluna // Criamos as variáveis aqui para a função usar
+		inteiro linha, coluna, totalJogadas = 0
 		logico alguemVenceu = falso
 
-		faca {
+		faca{
 			exibirTabuleiro()
 
-			// 1. JOGADA DO HUMANO
-			escreva("Sua vez (X). Digite Linha [0-2] e depois Coluna [0-2]:\n")
+			escreva("Sua vez [X]. Linha e coluna: ")
 			leia(linha, coluna)
-			casas[linha][coluna] = "X"
 
-			// 2. VERIFICAR SE O HUMANO GANHOU
-			alguemVenceu = verificarVencedor()
-
-			se (alguemVenceu == falso) 
-			{
-				// 3. JOGADA DA CPU (Só joga se o humano não ganhou)
-				faca {
-					linha = u.sorteia(0, 2)
-					coluna = u.sorteia(0, 2)
-				} enquanto (casas[linha][coluna] != " ") 
-				
-				casas[linha][coluna] = "O"
-
-				// 4. VERIFICAR SE A CPU GANHOU
+			se(casas[linha][coluna] == " "){
+				casas[linha][coluna] = "X"
+				totalJogadas = totalJogadas + 1
 				alguemVenceu = verificarVencedor()
-			}
-			
-		} enquanto (alguemVenceu == falso)
 
-		exibirTabuleiro()
-		escreva("O JOGO ACABOU!")
+				se(alguemVenceu == falso e totalJogadas < 9){
+					faca{
+						linha = u.sorteia(0, 2)
+						coluna = u.sorteia(0, 2)
+					}enquanto(casas[linha][coluna] != " ")
+
+					casas[linha][coluna] = "O"
+					totalJogadas = totalJogadas + 1
+					alguemVenceu = verificarVencedor()
+				}
+			}
+		}enquanto(alguemVenceu == falso e totalJogadas < 9)
+
+		exibirResultados(alguemVenceu, "X ou CPU")
 	}
 
 	funcao modoCPUvsCPU()
 	{
-		escreva("Iniciando modo CPU vs CPU...\n")
-	}
-
-	funcao logico verificarVencedor()
-	{
-		// Verifica Linhas
-		para(inteiro i = 0; i < 3; i++)
-		{
-			se (casas[i][0] != " " e casas[i][0] == casas[i][1] e casas[i][1] == casas[i][2])
-			{
-				retorne verdadeiro 
-			}
-		}
-		retorne falso
+		escreva("tem que fazer ainda")
 	}
 
 	funcao exibirTabuleiro()
 	{
-		limpa() 
-		escreva("      0     1     2  \n") 
-		escreva("   ___________________\n")
-		para (inteiro linha = 0; linha < 3; linha++) 
-		{
-			escreva(linha, " |") 
-			para (inteiro coluna = 0; coluna < 3; coluna++) 
-			{
-				escreva("  ", casas[linha][coluna], "  |") 
+		limpa()
+		escreva("    0   1   2\n")
+		para(inteiro linha = 0; linha < 3; linha++){
+			escreva(linha, " |")
+			para(inteiro coluna = 0; coluna < 3; coluna++){
+				escreva(" ", casas[linha][coluna], " |")
 			}
-			escreva("\n   |_____|_____|_____|\n")
+			escreva("\n  |---|---|---|\n")
 		}
-		escreva("\n")
+	}
+
+	funcao logico verificarVencedor()
+	{
+		para(inteiro i = 0; i < 3; i++){
+			se(casas[i][0] != " " e casas[i][0] == casas[i][1] e casas[i][1] == casas[i][2]) retorne verdadeiro
+			se(casas[0][i] != " " e casas[0][i] == casas[1][i] e casas[1][i] == casas[2][i]) retorne verdadeiro
+		}
+
+		se(casas[0][0] != " " e casas[0][0] == casas[1][1] e casas[1][1] == casas[2][2]) retorne verdadeiro
+		se(casas[0][2] != " " e casas[0][2] == casas[1][1] e casas[1][1] == casas[2][0]) retorne verdadeiro
+
+		retorne falso
+	}
+
+	funcao exibirResultados(logico venceu, cadeia jogador)
+	{
+		exibirTabuleiro()
+		se(venceu){
+			escreva("Fim de jogo. [", jogador, "] venceu.")
+		}senao{
+			escreva("Deu velha.")
+		}
 	}
 }
-
-// teste
