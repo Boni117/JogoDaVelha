@@ -29,13 +29,10 @@ exibirTabuleiro()	Renderiza a grade atualizada no console.
 verificarVencedor()	Checa todas as linhas, colunas e diagonais em busca de um trio.
 modo...()	Contém a lógica específica de cada modo de jogo.
 ________________________________________
- Exemplo de Interface
+## 🎮 Visualização do Jogo
 
-    0   1   2
-0 | X |   | O |
-  |---|---|---|
-1 |   | X |   |
-  |---|---|---|
-2 |   |   | O |
-  |---|---|---|
-
+| | 0 | 1 | 2 |
+| :---: | :---: | :---: | :---: |
+| **0** | X | | O |
+| **1** | | X | |
+| **2** | | | O |
